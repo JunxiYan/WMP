@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMP", "WMP\WMP.csproj", "{6BDC0203-5813-436C-B93C-D14852714E43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioControl", "AudioControl\AudioControl.csproj", "{913AFA6B-3E4C-4FA4-B852-610E33D4D7D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6BDC0203-5813-436C-B93C-D14852714E43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BDC0203-5813-436C-B93C-D14852714E43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BDC0203-5813-436C-B93C-D14852714E43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BDC0203-5813-436C-B93C-D14852714E43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{913AFA6B-3E4C-4FA4-B852-610E33D4D7D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{913AFA6B-3E4C-4FA4-B852-610E33D4D7D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{913AFA6B-3E4C-4FA4-B852-610E33D4D7D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{913AFA6B-3E4C-4FA4-B852-610E33D4D7D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3AC98182-1F01-4E04-B348-C5BE0AF3FE89}
+	EndGlobalSection
+EndGlobal
