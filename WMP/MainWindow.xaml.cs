@@ -22,11 +22,15 @@ namespace WMP
         {
             InitializeComponent();
         }
-
+        System.Media.SoundPlayer player = new System.Media.SoundPlayer("sample.wav");
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            //use play method from AudioControl
-            AudioControl.AudioControl.Play(null);
+            player.Play();
+        }
+
+        private void button2_Click(object sender, RoutedEventArgs e)
+        {
+            player.Stop();
         }
     }
 }

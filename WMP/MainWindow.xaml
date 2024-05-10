@@ -10,13 +10,24 @@
     Height="450"
     mc:Ignorable="d">
     <Grid>
-        <Button
+        <StackPanel>
+            <Button
             x:Name="button"
             Width="50"
             Height="50"
             HorizontalAlignment="Center"
             VerticalAlignment="Center" Click="button_Click">
-            Play
-        </Button>
+                Play
+            </Button>
+            <Button
+            x:Name="button2"
+            Width="50"
+            Height="50"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center" Click="button2_Click">
+                stop
+            </Button>
+        </StackPanel>
+
     </Grid>
 </Window>

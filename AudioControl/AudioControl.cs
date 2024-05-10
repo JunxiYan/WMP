@@ -5,7 +5,7 @@ namespace AudioControl
     {
         public static async Task Play(string[] args)
         {
-            var audioFile = new AudioFileReader("D:\\microsoft\\source\\repos\\WMP\\WMP\\sample.mp3");
+            var audioFile = new AudioFileReader("sample.mp3");
             var outputDevice = new WaveOutEvent();
             outputDevice.Init(audioFile);
             outputDevice.Play();
