@@ -11,7 +11,10 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Globalization;
 using System.Windows.Data;
-using System.Xaml.Permissions;
+using TagLib;
+using TagLib.Ape;
+using System.IO;
+using System.Diagnostics;
 
 namespace WMP
 {
@@ -27,6 +30,7 @@ namespace WMP
 
             InitializeComponent();
             
+           
         }
         
         private void button_Click(object sender, RoutedEventArgs e)
@@ -84,6 +88,18 @@ namespace WMP
                 string filename = dialog.FileName;
                 MessageBox.Show("打开文件: " + filename);
                 mediaElement.Source = new Uri(filename);
+                
+                var tfile = TagLib.File.Create(filename);
+                string title = tfile.Tag.Title;
+                //将封面图片显示在界面上
+                var pic = tfile.Tag.Pictures[0];
+                MemoryStream ms = new MemoryStream(pic.Data.Data);
+                ms.Seek(0, SeekOrigin.Begin);
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.StreamSource = ms;
+                bitmap.EndInit();
+                MusicImage.Source = bitmap;
             }
         }
     }

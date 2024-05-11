@@ -29,7 +29,7 @@
             Source=""
             Volume="{Binding ElementName=sliderVolume, Path=Value}" />
 
-
+        <Image x:Name="MusicImage" Grid.Row="1" />
         <Button
             x:Name="buttonPlay"
             Grid.Row="2"
