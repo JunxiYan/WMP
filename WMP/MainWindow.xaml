@@ -6,27 +6,52 @@
     xmlns:local="clr-namespace:WMP"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="MainWindow"
-    Width="800"
+    Width="400"
     Height="450"
     mc:Ignorable="d">
-    <Grid>
-        <StackPanel>
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <MediaElement
+            x:Name="mediaElement"
+            Margin="40"
+            LoadedBehavior="Manual"
+            MediaOpened="mediaElement_MediaOpened"
+            Source="sample.mp3"
+            Volume="{Binding ElementName=sliderVolume, Path=Value}" />
+        <StackPanel Grid.Row="1">
             <Button
-            x:Name="button"
-            Width="50"
-            Height="50"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center" Click="button_Click">
-                Play
-            </Button>
-            <Button
-            x:Name="button2"
-            Width="50"
-            Height="50"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center" Click="button2_Click">
-                stop
-            </Button>
+                x:Name="button"
+                Width="45"
+                Height="35"
+                Click="button_Click"
+                Content="播放"
+                RenderTransformOrigin="0.333,-0.526" />
+            <Label
+                x:Name="label"
+                Width="46"
+                Height="25"
+                Content="音量：" />
+            <Slider
+                x:Name="sliderVolume"
+                Width="164"
+                Height="18"
+                Maximum="1"
+                Minimum="0"
+                Value="0.5" />
+            <Label
+                x:Name="label1"
+                Width="46"
+                Height="25"
+                Content="进度：" />
+            <Slider
+                x:Name="sliderPosition"
+                Width="164"
+                Height="18"
+                ValueChanged="sliderPosition_ValueChanged" />
+            <Label
+                x:Name="label2"
+                Width="70"
+                Height="22"
+                Content="{Binding ElementName=sliderPosition, Path=Value}" />
         </StackPanel>
 
     </Grid>

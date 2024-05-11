@@ -10,6 +10,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AudioControl;
+using System.Windows.Threading;
+using System.Globalization;
+
 
 namespace WMP
 {
@@ -18,19 +21,49 @@ namespace WMP
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
+            
         }
-        System.Media.SoundPlayer player = new System.Media.SoundPlayer("sample.wav");
+        
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            player.Play();
+            if (button.Content.ToString() == "播放")
+            {
+                button.Content = "暂停";
+                mediaElement.Play();
+            }
+            else
+            {
+                button.Content = "播放";
+                mediaElement.Pause();
+            }
         }
 
-        private void button2_Click(object sender, RoutedEventArgs e)
+        DispatcherTimer timer = null;
+        private void mediaElement_MediaOpened(object sender, RoutedEventArgs e)
         {
-            player.Stop();
+            sliderPosition.Maximum = mediaElement.NaturalDuration.TimeSpan.TotalSeconds;
+            //媒体文件打开成功
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += new EventHandler(timer_tick);
+            timer.Start();
         }
+        private void timer_tick(object sender, EventArgs e)
+        {
+            sliderPosition.Value = mediaElement.Position.TotalSeconds;
+        }
+        //控制视频的位置
+        private void sliderPosition_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //mediaElement.Stop();
+            mediaElement.Position = TimeSpan.FromSeconds(sliderPosition.Value);
+            //mediaElement.Play();
+        }
+        
+
     }
 }

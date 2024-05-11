@@ -20,5 +20,14 @@ namespace AudioControl
 
 
         }
+        public static async Task Stop(string[] args)
+        {
+            var audioFile = new AudioFileReader("sample.mp3");
+            var outputDevice = new WaveOutEvent();
+            outputDevice.Init(audioFile);
+            outputDevice.Stop();
+
+
+        }
     }
 }

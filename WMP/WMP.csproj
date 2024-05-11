@@ -8,8 +8,4 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\AudioControl\AudioControl.csproj" />
-  </ItemGroup>
-
 </Project>
