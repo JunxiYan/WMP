@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Globalization;
 using System.Windows.Data;
+using System.Xaml.Permissions;
 
 namespace WMP
 {
@@ -25,21 +26,22 @@ namespace WMP
 
 
             InitializeComponent();
-
+            
         }
         
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            if (button.Content.ToString() == "播放")
+            if (buttonPlay.Background.ToString() != "#FF000000")
             {
-                button.Content = "暂停";
-                mediaElement.Play();
-            }
-            else
-            {
-                button.Content = "播放";
+                buttonPlay.Background = new SolidColorBrush(Colors.Black);
                 mediaElement.Pause();
             }
+            else 
+            {
+                buttonPlay.Background = new SolidColorBrush(Colors.White);
+                mediaElement.Play();
+            }
+
         }
 
         DispatcherTimer timer = null;
