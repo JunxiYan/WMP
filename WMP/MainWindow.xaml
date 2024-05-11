@@ -9,6 +9,7 @@
     Width="400"
     Height="450"
     mc:Ignorable="d">
+
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <MediaElement
             x:Name="mediaElement"
@@ -51,7 +52,7 @@
                 x:Name="label2"
                 Width="70"
                 Height="22"
-                Content="{Binding ElementName=sliderPosition, Path=Value}" />
+                Content="{Binding ElementName=sliderPosition, Path=Value }" />
         </StackPanel>
 
     </Grid>

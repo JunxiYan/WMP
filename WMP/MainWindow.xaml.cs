@@ -1,5 +1,4 @@
-﻿using NAudio.Wave;
-using System.Text;
+﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,10 +8,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using AudioControl;
 using System.Windows.Threading;
 using System.Globalization;
-
+using System.Windows.Data;
 
 namespace WMP
 {
