@@ -10,14 +10,15 @@
     Height="450"
     mc:Ignorable="d">
 
-    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+
         <MediaElement
             x:Name="mediaElement"
-            Margin="40"
             LoadedBehavior="Manual"
             MediaOpened="mediaElement_MediaOpened"
-            Source="sample.mp3"
+            Source=""
             Volume="{Binding ElementName=sliderVolume, Path=Value}" />
+
         <StackPanel Grid.Row="1">
             <Button
                 x:Name="button"
@@ -52,7 +53,9 @@
                 x:Name="label2"
                 Width="70"
                 Height="22"
-                Content="{Binding ElementName=sliderPosition, Path=Value }" />
+                Content="{Binding ElementName=sliderPosition, Path=Value}" />
+
+            <Button Click="Button_Click_1" Content="File" />
         </StackPanel>
 
     </Grid>

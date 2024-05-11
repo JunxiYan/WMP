@@ -22,8 +22,10 @@ namespace WMP
 
         public MainWindow()
         {
+
+
             InitializeComponent();
-            
+
         }
         
         private void button_Click(object sender, RoutedEventArgs e)
@@ -61,7 +63,26 @@ namespace WMP
             mediaElement.Position = TimeSpan.FromSeconds(sliderPosition.Value);
             //mediaElement.Play();
         }
-        
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            // Configure open file dialog box
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.FileName = ""; // Default file name
+            dialog.DefaultExt = ""; // Default file extension
+            dialog.Filter = "audio forms|*.mp3;*.flac;*.wav;*.opus;*.m4a"; // Filter files by extension
+
+            // Show open file dialog box
+            bool? result = dialog.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                string filename = dialog.FileName;
+                MessageBox.Show("打开文件: " + filename);
+                mediaElement.Source = new Uri(filename);
+            }
+        }
     }
 }
