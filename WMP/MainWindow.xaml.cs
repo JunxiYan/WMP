@@ -100,6 +100,8 @@ namespace WMP
                 bitmap.StreamSource = ms;
                 bitmap.EndInit();
                 MusicImage.Source = bitmap;
+                //显示歌曲信息
+                MusicTitle.Text = title;
             }
         }
     }
