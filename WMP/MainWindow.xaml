@@ -8,11 +8,12 @@
     Title="WMP"
     Width="300"
     Height="450"
-    MinHeight="280"
     MinWidth="150"
+    MinHeight="280"
     mc:Ignorable="d">
     <Window.Resources>
-        <local:TimeConverter x:Key="cvtTime"/>
+        <local:TimeConverter x:Key="cvtTime" />
+        <local:ViewModel x:Key="vm" />
     </Window.Resources>
     <Grid Background="#39C5BB">
 
@@ -23,19 +24,14 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Click="Button_Click_1" Content="File" />
+            <Button Command="{Binding OpenMediaCommand}" Content="File" />
             <Button Content="diretory" />
         </StackPanel>
-        <MediaElement
-            x:Name="mediaElement"
-            LoadedBehavior="Manual"
-            MediaOpened="mediaElement_MediaOpened"
-            Source=""
-            Volume="{Binding ElementName=sliderVolume, Path=Value}" />
-        <Grid Grid.Row="1" >
-         <Image x:Name="MusicImage" />   
+
+        <Grid Grid.Row="1">
+            <Image Source="{Binding MusicImage}" />
         </Grid>
-        
+
 
         <Slider
             x:Name="sliderVolume"
@@ -47,35 +43,45 @@
             IsMoveToPointEnabled="True"
             Maximum="1"
             Minimum="0"
-            Value="0.5" />
+            Value="{Binding MusicVolume}" />
 
         <StackPanel Grid.Row="2" VerticalAlignment="Top">
             <TextBlock
-                x:Name="MusicTitle"
                 Margin="1"
-                HorizontalAlignment="Center" />
+                HorizontalAlignment="Center"
+                Text="{Binding MusicTitle}" />
             <Slider
                 x:Name="sliderPosition"
                 Grid.Row="2"
                 Margin="10"
                 VerticalAlignment="Top"
-                ValueChanged="sliderPosition_ValueChanged" />
-            <TextBlock 
-                x:Name="TextblockPosition"
-                HorizontalAlignment="Center"
-                
-                Text="{Binding Value, ElementName=sliderPosition, Converter={StaticResource cvtTime}}"
-                FontSize="10"  >
+                IsMoveToPointEnabled="False"
+                Maximum="{Binding MusicDuration}"
+                Minimum="0"
+                Value="{Binding MusicPosition, Mode=TwoWay}">
+                <!--<i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Thumb.DragStarted">
+                        <i:InvokeCommandAction Command="{Binding DragStartedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>-->
+            </Slider>
 
-            </TextBlock>
+            <StackPanel>
+                <TextBlock
+                    x:Name="TextblockPosition"
+                    HorizontalAlignment="Center"
+                    FontSize="10"
+                    Text="{Binding Value, ElementName=sliderPosition, Converter={StaticResource cvtTime}}" />
+            </StackPanel>
             <Button
                 x:Name="buttonPlay"
                 Grid.Row="2"
                 Width="50"
                 Height="50"
-                Click="button_Click" Background="Black"
+                Background="Black"
                 BorderBrush="Aqua"
-                BorderThickness="1">
+                BorderThickness="1"
+                Command="{Binding PlayandStopCommand}">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="Background" Value="Black" />
