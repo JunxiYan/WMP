@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -97,7 +98,7 @@ namespace WMP
             }
         }
 
-        async Task openMediaAsync()
+        void openMedia()
         {
             dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.FileName = "";
@@ -111,6 +112,23 @@ namespace WMP
                 LoadMedia(dialog.FileName);
             }
         }
+
+        void openFolder()
+        {
+            Microsoft.Win32.OpenFolderDialog Folderdialog = new Microsoft.Win32.OpenFolderDialog();
+            Folderdialog.ShowDialog();
+            MessageBox.Show(Folderdialog.FolderName);
+            //查找所有音频文件，将文件名存入一个列表中，并在messagebox输出
+            string[] files = Directory.GetFiles(Folderdialog.FolderName, "*.flac", SearchOption.AllDirectories);
+            string filelist = "";
+            foreach (string file in files)
+            {
+                filelist += file + "\n";
+            }
+            MessageBox.Show(filelist);
+
+        }
+
         private void timer_tick(object sender, EventArgs e)
         {
 
@@ -190,10 +208,11 @@ namespace WMP
             MusicMedia.Position = TimeSpan.FromSeconds(MusicPosition);
         }
         public ICommand PlayandStopCommand => new RelayCommand(o => PlayandStop(), o => betrue());
-        public ICommand OpenMediaCommand => new RelayCommand(async o => await openMediaAsync(), o => betrue());
+        public ICommand OpenMediaCommand => new RelayCommand(async o => openMedia(), o => betrue());
         public ICommand PositionChangedCommand => new RelayCommand(o => PositionChanged(), o => betrue());
         public ICommand forwardCommand => new RelayCommand(o => forward(), o => betrue());
         public ICommand backwardCommand => new RelayCommand(o => backward(), o => betrue());
+        public ICommand OpenFolderCommand => new RelayCommand(o => openFolder(), o => betrue());
 
     }
 }

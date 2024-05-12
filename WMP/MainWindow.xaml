@@ -24,7 +24,7 @@
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
             <Button Command="{Binding OpenMediaCommand}" Content="File " />
-            <Button HorizontalAlignment="Right" Content="diret" />
+            <Button HorizontalAlignment="Right" Content="diret" Command="{Binding OpenFolderCommand}"/>
         </DockPanel>
         <Grid Grid.Row="1">
             <Image Source="{Binding MusicImage}" />
