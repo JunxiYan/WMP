@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -17,13 +9,23 @@ namespace WMP
 {
     class ViewModel : INotifyPropertyChanged
     {
+        Microsoft.Win32.OpenFileDialog dialog;
         MediaElement MusicMedia;
         DispatcherTimer timer = null;
+        Boolean isPlaying = false;
         bool betrue() { return true; }
         string StopColor = "#FF000000";
         string PlayColor = "#FFFFFFFF";
-        public string CurrentColor;
-
+        private string _CurrentColor;
+        public string CurrentColor
+        {
+            get { return _CurrentColor; }
+            set
+            {
+                _CurrentColor = value;
+                RaisePropertyChanged("CurrentColor");
+            }
+        }
         private string _MusicVolume = "0.5";
         public string MusicVolume
         {
@@ -85,8 +87,6 @@ namespace WMP
             MusicMedia = new MediaElement();
             MusicMedia.LoadedBehavior = MediaState.Manual;
             MusicMedia.UnloadedBehavior = MediaState.Manual;
-            //MusicMedia.MediaOpened += MusicMedia_MediaOpened;
-            //MusicMedia.MediaEnded += MusicMedia_MediaEnded;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void RaisePropertyChanged(string propertyName)
@@ -99,7 +99,7 @@ namespace WMP
 
         async Task openMediaAsync()
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.FileName = "";
             dialog.DefaultExt = "";
             dialog.Filter = "audio forms|*.mp3;*.flac;*.wav;*.opus;*.m4a";
@@ -108,41 +108,7 @@ namespace WMP
             // Process open file dialog box results
             if (result == true)
             {
-                // Open document
-                string filename = dialog.FileName;
-
-                MusicMedia.Source = new Uri(filename);
-
-
-                var tfile = await Task.Run(() => TagLib.File.Create(filename));
-                string title = tfile.Tag.Title;
-                _MusicTitle = title;
-                MusicTitle = _MusicTitle;
-                //将封面图片显示在界面上
-                var pic = tfile.Tag.Pictures[0];
-                MemoryStream ms = new MemoryStream(pic.Data.Data);
-                ms.Seek(0, SeekOrigin.Begin);
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.StreamSource = ms;
-                bitmap.EndInit();
-                MusicImage = bitmap;
-
-
-
-                MusicMedia.MediaOpened += (s, e) =>
-                {
-                    _MusicDuration = MusicMedia.NaturalDuration.TimeSpan.TotalSeconds;
-                    MusicDuration = _MusicDuration;
-                    _MusicPosition = MusicMedia.Position.TotalSeconds;
-                    MusicPosition = _MusicPosition;
-
-                };
-                timer = new DispatcherTimer();
-                timer.Interval = TimeSpan.FromSeconds(0.5);
-                timer.Tick += new EventHandler(timer_tick);
-                timer.Start();
-
+                LoadMedia(dialog.FileName);
             }
         }
         private void timer_tick(object sender, EventArgs e)
@@ -154,36 +120,80 @@ namespace WMP
             MusicMedia.Volume = double.Parse(MusicVolume);
         }
 
-        //控制音量
 
+        private async void LoadMedia(string filename)
+        {
+            MusicMedia.Source = new Uri(filename);
+
+            var tfile = await Task.Run(() => TagLib.File.Create(filename));
+            string title = tfile.Tag.Title;
+            _MusicTitle = title;
+            MusicTitle = _MusicTitle;
+            //将封面图片显示在界面上
+            var pic = tfile.Tag.Pictures[0];
+            MemoryStream ms = new MemoryStream(pic.Data.Data);
+            ms.Seek(0, SeekOrigin.Begin);
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.StreamSource = ms;
+            bitmap.EndInit();
+            MusicImage = bitmap;
+
+
+            MusicMedia.MediaOpened += (s, e) =>
+            {
+
+                _MusicDuration = MusicMedia.NaturalDuration.TimeSpan.TotalSeconds;
+                MusicDuration = _MusicDuration;
+                _MusicPosition = MusicMedia.Position.TotalSeconds;
+                MusicPosition = _MusicPosition;
+
+            };
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(0.1);
+            timer.Tick += new EventHandler(timer_tick);
+            timer.Start();
+
+        }
+
+        //控制音量
 
         void PlayandStop()
         {
-            //if (CurrentColor != "#FF000000")
-            //{
-            //    CurrentColor = StopColor;
-            //    MusicMedia.Pause();
-            //}
-            //else
-            //{
-            //    CurrentColor = PlayColor;
-            //    MusicMedia.Play();
-            //}
-            MusicMedia.Play();
+            //判断当前音乐是否在播放，如果在播放则暂停，否则播放
+            if (isPlaying)
+            {
+                MusicMedia.Pause();
+                CurrentColor = PlayColor;
+                isPlaying = false;
+            }
+            else
+            {
+                MusicMedia.Play();
+                CurrentColor = StopColor;
+                isPlaying = true;
+            }
         }
-        void DragStarted()
+ 
+        void forward()
         {
-            timer.Stop();
+            MusicMedia.Position = TimeSpan.FromSeconds(MusicPosition + 15);
         }
-        void DragCompleted()
+        void backward()
         {
+            MusicMedia.Position = TimeSpan.FromSeconds(MusicPosition - 15);
+        }
+
+        void PositionChanged()
+        {
+            //timer.Stop();
             MusicMedia.Position = TimeSpan.FromSeconds(MusicPosition);
-            timer.Start();
         }
         public ICommand PlayandStopCommand => new RelayCommand(o => PlayandStop(), o => betrue());
         public ICommand OpenMediaCommand => new RelayCommand(async o => await openMediaAsync(), o => betrue());
-        public ICommand DragStartedCommand => new RelayCommand(o => DragStarted(), o => betrue());
-        public ICommand DragCompletedCommand => new RelayCommand(o => DragCompleted(), o => betrue());
+        public ICommand PositionChangedCommand => new RelayCommand(o => PositionChanged(), o => betrue());
+        public ICommand forwardCommand => new RelayCommand(o => forward(), o => betrue());
+        public ICommand backwardCommand => new RelayCommand(o => backward(), o => betrue());
 
     }
 }
