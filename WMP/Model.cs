@@ -24,7 +24,7 @@ namespace WMP
 
         private Microsoft.Win32.OpenFileDialog _dialog;
 
-        public Microsoft.Win32.OpenFileDialog Dialog
+        public Microsoft.Win32.OpenFileDialog dialog
         {
             get { return _dialog; }
             set { _dialog = value; }
@@ -40,15 +40,15 @@ namespace WMP
 
         private DispatcherTimer _timer;
 
-        public DispatcherTimer Timer
+        public DispatcherTimer timer
         {
             get { return _timer; }
             set { _timer = value; }
         }
 
-        public bool IsPlaying { get; set; } = false;
+        public bool isPlaying { get; set; } = false;
 
-        public bool BeTrue() { return true; }
+        public bool beTrue() { return true; }
 
         public string StopColor { get; set; } = "#FF000000";
         public string PlayColor { get; set; } = "#FFFFFFFF";

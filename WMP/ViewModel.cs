@@ -146,11 +146,11 @@ namespace WMP
             playModel.MusicMedia.Position = TimeSpan.FromSeconds(playModel.MusicPosition);
         }
 
-        public ICommand PlayandStopCommand => new RelayCommand(o => PlayandStop(), o => playModel.betrue());
-        public ICommand OpenMediaCommand => new RelayCommand(async o => openMedia(), o => playModel.betrue());
-        public ICommand PositionChangedCommand => new RelayCommand(o => PositionChanged(), o => playModel.betrue());
-        public ICommand forwardCommand => new RelayCommand(o => forward(), o => playModel.betrue());
-        public ICommand backwardCommand => new RelayCommand(o => backward(), o => playModel.betrue());
-        public ICommand OpenFolderCommand => new RelayCommand(o => openFolder(), o => playModel.betrue());
+        public ICommand PlayandStopCommand => new RelayCommand(o => PlayandStop(), o => playModel.beTrue());
+        public ICommand OpenMediaCommand => new RelayCommand(async o => openMedia(), o => playModel.beTrue());
+        public ICommand PositionChangedCommand => new RelayCommand(o => PositionChanged(), o => playModel.beTrue());
+        public ICommand forwardCommand => new RelayCommand(o => forward(), o => playModel.beTrue());
+        public ICommand backwardCommand => new RelayCommand(o => backward(), o => playModel.beTrue());
+        public ICommand OpenFolderCommand => new RelayCommand(o => openFolder(), o => playModel.beTrue());
     }
 }
