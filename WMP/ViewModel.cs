@@ -1,10 +1,12 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Data.Sqlite;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Microsoft.Data.Sqlite;
 
 namespace WMP
 {
@@ -119,13 +121,35 @@ namespace WMP
             Folderdialog.ShowDialog();
             MessageBox.Show(Folderdialog.FolderName);
             //查找所有音频文件，将文件名存入一个列表中，并在messagebox输出
-            string[] files = Directory.GetFiles(Folderdialog.FolderName, "*.flac", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(Folderdialog.FolderName, "*.mp3", SearchOption.AllDirectories);
             string filelist = "";
-            foreach (string file in files)
+            //创建一个数据表，将files 中的文件名存入数据库中
+            using (var connection = new SqliteConnection("Data Source=Music.db"))
             {
-                filelist += file + "\n";
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "CREATE TABLE IF NOT EXISTS Music (id INTEGER PRIMARY KEY, filename TEXT)";
+                command.ExecuteNonQuery();
+                foreach (string file in files)
+                {
+                    command.CommandText = "INSERT INTO Music (filename) VALUES ('" + file + "')";
+                    command.ExecuteNonQuery();
+                }
             }
-            MessageBox.Show(filelist);
+            //从数据库中读取文件名，并在messagebox输出
+            using (var connection = new SqliteConnection("Data Source=Music.db"))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT filename FROM Music";
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        MessageBox.Show(reader.GetString(0));
+                    }
+                }
+            }
 
         }
 
@@ -136,6 +160,24 @@ namespace WMP
             _MusicPosition = MusicMedia.Position.TotalSeconds;
             MusicPosition = _MusicPosition;
             MusicMedia.Volume = double.Parse(MusicVolume);
+        }
+
+
+        private async void ReadTitle()
+        {
+            var tfile = await Task.Run(() => TagLib.File.Create(dialog.FileName));
+            string title = tfile.Tag.Title;
+            _MusicTitle = title;
+            MusicTitle = _MusicTitle;
+            //将封面图片显示在界面上
+            var pic = tfile.Tag.Pictures[0];
+            MemoryStream ms = new MemoryStream(pic.Data.Data);
+            ms.Seek(0, SeekOrigin.Begin);
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.StreamSource = ms;
+            bitmap.EndInit();
+            MusicImage = bitmap;
         }
 
 
@@ -156,8 +198,6 @@ namespace WMP
             bitmap.StreamSource = ms;
             bitmap.EndInit();
             MusicImage = bitmap;
-
-
             MusicMedia.MediaOpened += (s, e) =>
             {
 
