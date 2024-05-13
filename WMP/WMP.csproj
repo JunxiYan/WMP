@@ -14,6 +14,7 @@
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
     <PackageReference Include="SQLite" Version="3.13.0" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.154" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
   </ItemGroup>
 

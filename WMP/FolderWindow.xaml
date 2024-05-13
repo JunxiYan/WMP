@@ -10,13 +10,15 @@
     Height="450"
     mc:Ignorable="d">
     <Grid>
-        <ListView HorizontalAlignment="Center">
-            <ListViewItem Content="Item 2" />
-            <ListViewItem Content="Item 2" />
-            <ListViewItem Content="Item 3" />
-            <ListViewItem Content="Item 4" />
-            <ListViewItem Content="Item 5" />
-            <ListViewItem Content="Item 6" />
+        <ListView ItemsSource="{Binding YourCollection}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <!-- 这里放置你的列表项内容 -->
+                        <TextBlock Text="{Binding YourProperty}" Margin="5"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
     </Grid>
 </Window>
