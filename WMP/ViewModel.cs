@@ -11,14 +11,14 @@ namespace WMP
 {
     class ViewModel
     {
-        private Model _Model;
+        private PlayModel _Model;
 
-        public Model Model
+        public PlayModel playModel
         {
             get
             {
                 if (_Model == null)
-                    _Model = new Model();
+                    _Model = new PlayModel();
                 return _Model;
             }
             set { _Model = value; }
@@ -26,25 +26,25 @@ namespace WMP
 
         public ViewModel()
         {
-            Model = new Model();
+            playModel = new PlayModel();
 
-            Model.MusicMedia = new MediaElement();
-            Model.MusicMedia.LoadedBehavior = MediaState.Manual;
-            Model.MusicMedia.UnloadedBehavior = MediaState.Manual;
+            playModel.MusicMedia = new MediaElement();
+            playModel.MusicMedia.LoadedBehavior = MediaState.Manual;
+            playModel.MusicMedia.UnloadedBehavior = MediaState.Manual;
         }
 
         void openMedia()
         {
-            Model.dialog = new Microsoft.Win32.OpenFileDialog();
-            Model.dialog.FileName = "";
-            Model.dialog.DefaultExt = "";
-            Model.dialog.Filter = "audio forms|*.mp3;*.flac;*.wav;*.opus;*.m4a";
+            playModel.dialog = new Microsoft.Win32.OpenFileDialog();
+            playModel.dialog.FileName = "";
+            playModel.dialog.DefaultExt = "";
+            playModel.dialog.Filter = "audio forms|*.mp3;*.flac;*.wav;*.opus;*.m4a";
             // Show open file dialog box
-            bool? result = Model.dialog.ShowDialog();
+            bool? result = playModel.dialog.ShowDialog();
             // Process open file dialog box results
             if (result == true)
             {
-                LoadMedia(Model.dialog.FileName);
+                LoadMedia(playModel.dialog.FileName);
             }
         }
 
@@ -76,8 +76,8 @@ namespace WMP
 
         private void timer_tick(object sender, EventArgs e)
         {
-            Model.MusicPosition = Model.MusicMedia.Position.TotalSeconds;
-            Model.MusicMedia.Volume = double.Parse(Model.MusicVolume);
+            playModel.MusicPosition = playModel.MusicMedia.Position.TotalSeconds;
+            playModel.MusicMedia.Volume = double.Parse(playModel.MusicVolume);
         }
 
         private string ReadTitle(string filesUri)
@@ -88,10 +88,10 @@ namespace WMP
 
         private async void LoadMedia(string filename)
         {
-            Model.MusicMedia.Source = new Uri(filename);
+            playModel.MusicMedia.Source = new Uri(filename);
             var tfile = await Task.Run(() => TagLib.File.Create(filename));
             string title = tfile.Tag.Title;
-            Model.MusicTitle = title;
+            playModel.MusicTitle = title;
             //将封面图片显示在界面上
             var pic = tfile.Tag.Pictures[0];
             MemoryStream ms = new MemoryStream(pic.Data.Data);
@@ -100,57 +100,57 @@ namespace WMP
             bitmap.BeginInit();
             bitmap.StreamSource = ms;
             bitmap.EndInit();
-            Model.MusicImage = bitmap;
-            Model.MusicMedia.MediaOpened += (s, e) =>
+            playModel.MusicImage = bitmap;
+            playModel.MusicMedia.MediaOpened += (s, e) =>
             {
-                Model.MusicDuration = Model.MusicMedia.NaturalDuration.TimeSpan.TotalSeconds;
-                Model.MusicPosition = Model.MusicMedia.Position.TotalSeconds;
+                playModel.MusicDuration = playModel.MusicMedia.NaturalDuration.TimeSpan.TotalSeconds;
+                playModel.MusicPosition = playModel.MusicMedia.Position.TotalSeconds;
             };
-            Model.timer = new DispatcherTimer();
-            Model.timer.Interval = TimeSpan.FromSeconds(0.1);
-            Model.timer.Tick += new EventHandler(timer_tick);
-            Model.timer.Start();
+            playModel.timer = new DispatcherTimer();
+            playModel.timer.Interval = TimeSpan.FromSeconds(0.1);
+            playModel.timer.Tick += new EventHandler(timer_tick);
+            playModel.timer.Start();
         }
 
         //控制音量
         void PlayandStop()
         {
             //判断当前音乐是否在播放，如果在播放则暂停，否则播放
-            if (Model.isPlaying)
+            if (playModel.isPlaying)
             {
-                Model.MusicMedia.Pause();
-                Model.CurrentColor = Model.PlayColor;
-                Model.isPlaying = false;
+                playModel.MusicMedia.Pause();
+                playModel.CurrentColor = playModel.PlayColor;
+                playModel.isPlaying = false;
             }
             else
             {
-                Model.MusicMedia.Play();
-                Model.CurrentColor = Model.StopColor;
-                Model.isPlaying = true;
+                playModel.MusicMedia.Play();
+                playModel.CurrentColor = playModel.StopColor;
+                playModel.isPlaying = true;
             }
         }
 
         void forward()
         {
-            Model.MusicMedia.Position = TimeSpan.FromSeconds(Model.MusicPosition + 15);
+            playModel.MusicMedia.Position = TimeSpan.FromSeconds(playModel.MusicPosition + 15);
         }
 
         void backward()
         {
-            Model.MusicMedia.Position = TimeSpan.FromSeconds(Model.MusicPosition - 15);
+            playModel.MusicMedia.Position = TimeSpan.FromSeconds(playModel.MusicPosition - 15);
         }
 
         void PositionChanged()
         {
             //timer.Stop();
-            Model.MusicMedia.Position = TimeSpan.FromSeconds(Model.MusicPosition);
+            playModel.MusicMedia.Position = TimeSpan.FromSeconds(playModel.MusicPosition);
         }
 
-        public ICommand PlayandStopCommand => new RelayCommand(o => PlayandStop(), o => Model.betrue());
-        public ICommand OpenMediaCommand => new RelayCommand(async o => openMedia(), o => Model.betrue());
-        public ICommand PositionChangedCommand => new RelayCommand(o => PositionChanged(), o => Model.betrue());
-        public ICommand forwardCommand => new RelayCommand(o => forward(), o => Model.betrue());
-        public ICommand backwardCommand => new RelayCommand(o => backward(), o => Model.betrue());
-        public ICommand OpenFolderCommand => new RelayCommand(o => openFolder(), o => Model.betrue());
+        public ICommand PlayandStopCommand => new RelayCommand(o => PlayandStop(), o => playModel.betrue());
+        public ICommand OpenMediaCommand => new RelayCommand(async o => openMedia(), o => playModel.betrue());
+        public ICommand PositionChangedCommand => new RelayCommand(o => PositionChanged(), o => playModel.betrue());
+        public ICommand forwardCommand => new RelayCommand(o => forward(), o => playModel.betrue());
+        public ICommand backwardCommand => new RelayCommand(o => backward(), o => playModel.betrue());
+        public ICommand OpenFolderCommand => new RelayCommand(o => openFolder(), o => playModel.betrue());
     }
 }

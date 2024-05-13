@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Microsoft.Data.Sqlite;
 
 namespace WMP
 {
-    class Model : INotifyPropertyChanged
+    class PlayModel : INotifyPropertyChanged
     {
-        public Model()
+        public PlayModel()
         {
             _dialog = new Microsoft.Win32.OpenFileDialog();
             _MusicMedia = new MediaElement();
@@ -28,7 +24,7 @@ namespace WMP
 
         private Microsoft.Win32.OpenFileDialog _dialog;
 
-        public Microsoft.Win32.OpenFileDialog dialog
+        public Microsoft.Win32.OpenFileDialog Dialog
         {
             get { return _dialog; }
             set { _dialog = value; }
@@ -44,18 +40,18 @@ namespace WMP
 
         private DispatcherTimer _timer;
 
-        public DispatcherTimer timer
+        public DispatcherTimer Timer
         {
             get { return _timer; }
             set { _timer = value; }
         }
 
-        public Boolean isPlaying = false;
+        public bool IsPlaying { get; set; } = false;
 
-        public bool betrue() { return true; }
+        public bool BeTrue() { return true; }
 
-        public string StopColor = "#FF000000";
-        public string PlayColor = "#FFFFFFFF";
+        public string StopColor { get; set; } = "#FF000000";
+        public string PlayColor { get; set; } = "#FFFFFFFF";
 
         private string _MusicTitle;
 
@@ -146,6 +142,85 @@ namespace WMP
         private void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    class FolderModel
+    {
+        public FolderModel()
+        { }
+        //在folderModel开启时利用数据库创建表来存储文件夹里待播放的音乐，只作为Model层使用 不书写业务逻辑
+        //创建数据库
+        public void CreateDatabase()
+        {
+            using (SqliteConnection db = new SqliteConnection("Filename=sqliteSample.db"))
+            {
+                db.Open();
+                String tableCommand = "CREATE TABLE IF NOT " +
+                    "EXISTS MyTable (Primary_Key INTEGER PRIMARY KEY, " +
+                    "Name NVARCHAR(2048) NULL)";
+
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+
+                createTable.ExecuteReader();
+            }
+        }
+        //创建表
+        public void CreateTable()
+        {
+            using (SqliteConnection db = new SqliteConnection("Filename=sqliteSample.db"))
+            {
+                db.Open();
+                String tableCommand = "CREATE TABLE IF NOT " +
+                    "EXISTS MyTable (Primary_Key INTEGER PRIMARY KEY, " +
+                    "Name NVARCHAR(2048) NULL)";
+
+                SqliteCommand createTable = new SqliteCommand(tableCommand, db);
+
+                createTable.ExecuteReader();
+            }
+        }
+        //插入数据
+        public void InsertData(string inputName)
+        {
+            using (SqliteConnection db = new SqliteConnection("Filename=sqliteSample.db"))
+            {
+                db.Open();
+                SqliteCommand insertCommand = new SqliteCommand();
+                insertCommand.Connection = db;
+
+                insertCommand.CommandText = "INSERT INTO MyTable VALUES (NULL, @EntryName);";
+                insertCommand.Parameters.AddWithValue("@EntryName", inputName);
+
+                insertCommand.ExecuteReader();
+
+                db.Close();
+            }
+        }
+
+        //创建一个属性用来存储歌曲列表和其路径
+        private List<string> _MusicList = new List<string>();
+
+        public List<string> MusicList
+        {
+            get { return _MusicList; }
+            set { _MusicList = value; }
+        }
+
+        private List<string> _MusicPath = new List<string>();
+
+        public List<string> MusicPath
+        {
+            get { return _MusicPath; }
+            set { _MusicPath = value; }
+        }
+
+        private List<string> _MusicTitle = new List<string>();
+
+        public List<string> MusicTitle
+        {
+            get { return _MusicTitle; }
+            set { _MusicTitle = value; }
         }
     }
 }
