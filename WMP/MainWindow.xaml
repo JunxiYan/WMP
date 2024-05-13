@@ -24,10 +24,13 @@
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
             <Button Command="{Binding OpenMediaCommand}" Content="File " />
-            <Button HorizontalAlignment="Right" Content="diret" Command="{Binding OpenFolderCommand}"/>
+            <Button
+                HorizontalAlignment="Right"
+                Command="{Binding OpenFolderCommand}"
+                Content="diret" />
         </DockPanel>
         <Grid Grid.Row="1">
-            <Image Source="{Binding MusicImage}" />
+            <Image Source="{Binding playModel.MusicImage}" />
         </Grid>
         <Slider
             x:Name="sliderVolume"
@@ -39,21 +42,21 @@
             IsMoveToPointEnabled="True"
             Maximum="1"
             Minimum="0"
-            Value="{Binding MusicVolume}" />
+            Value="{Binding playModel.MusicVolume}" />
         <StackPanel Grid.Row="2" VerticalAlignment="Top">
             <TextBlock
                 Margin="1"
                 HorizontalAlignment="Center"
-                Text="{Binding MusicTitle}" />
+                Text="{Binding playModel.MusicTitle}" />
             <Slider
                 x:Name="sliderPosition"
                 Grid.Row="2"
                 Margin="10"
                 VerticalAlignment="Top"
                 IsMoveToPointEnabled="True"
-                Maximum="{Binding MusicDuration}"
+                Maximum="{Binding playModel.MusicDuration}"
                 Minimum="0"
-                Value="{Binding MusicPosition}">
+                Value="{Binding playModel.MusicPosition}">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="ValueChanged">
                         <behaviors:InvokeCommandAction Command="{Binding PositionChangedCommand}" />
@@ -76,7 +79,7 @@
                     Width="50"
                     Height="50"
                     HorizontalAlignment="Center"
-                    Background="{Binding CurrentColor}"
+                    Background="{Binding playModel.CurrentColor}"
                     BorderBrush="Lavender"
                     BorderThickness="2"
                     Command="{Binding PlayandStopCommand}">
@@ -91,7 +94,6 @@
                     forward
                 </Button>
             </Grid>
-
         </StackPanel>
 
     </Grid>
