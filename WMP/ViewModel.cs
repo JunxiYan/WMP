@@ -52,7 +52,7 @@ namespace WMP
         {
             Microsoft.Win32.OpenFolderDialog Folderdialog = new Microsoft.Win32.OpenFolderDialog();
             Folderdialog.ShowDialog();
-            MessageBox.Show(Folderdialog.FolderName);
+           // MessageBox.Show(Folderdialog.FolderName);
             //查找所有音频文件，将文件名存入一个列表中，并在messagebox输出
             string[] filesPath = Directory.GetFiles(Folderdialog.FolderName, "*.flac", SearchOption.AllDirectories);
             string[] files = new string[filesPath.Length];
@@ -61,17 +61,33 @@ namespace WMP
             {
                 files[i] = ReadTitle(filesPath[i]);
             }
-            //输出文件名
-            string allfiles = "";
-            foreach (string file in files)
+            //确定文件数量
+             int filenumber = files.Length;
+
+            using (var connection = new SqliteConnection("Data Source=Music.db"))
             {
-                allfiles += file + "\n";
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "DROP TABLE IF EXISTS Music";
+                command.ExecuteNonQuery();
+                command.CommandText = "CREATE TABLE Music (Id INTEGER PRIMARY KEY, Name TEXT NOT NULL)";
+                command.ExecuteNonQuery();
+                for (int i = 0; i < files.Length; i++)
+                {
+                    command.CommandText = "INSERT INTO Music (Name) VALUES ('" + files[i] + "')";
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            //使用messagebox输出所有文件名组成的字符串
+            string allfiles = "";
+            for (int i = 0; i < files.Length; i++)
+            {
+                allfiles += files[i] + "\n";
             }
             MessageBox.Show(allfiles);
 
-            //创建一个新页面，将文件名传入
-            FolderWindow folderWindow = new FolderWindow();
-            folderWindow.Show();
+
         }
 
         private void timer_tick(object sender, EventArgs e)
@@ -145,7 +161,6 @@ namespace WMP
             //timer.Stop();
             playModel.MusicMedia.Position = TimeSpan.FromSeconds(playModel.MusicPosition);
         }
-
         public ICommand PlayandStopCommand => new RelayCommand(o => PlayandStop(), o => playModel.beTrue());
         public ICommand OpenMediaCommand => new RelayCommand(async o => openMedia(), o => playModel.beTrue());
         public ICommand PositionChangedCommand => new RelayCommand(o => PositionChanged(), o => playModel.beTrue());

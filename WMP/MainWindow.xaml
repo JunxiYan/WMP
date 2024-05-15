@@ -71,8 +71,15 @@
                     Text="{Binding Value, ElementName=sliderPosition, Converter={StaticResource cvtTime}}" />
             </StackPanel>
             <Grid>
-                <Button HorizontalAlignment="Left" Command="{Binding backwardCommand}">
-                    backwd
+                <Button HorizontalAlignment="Left" Command="{Binding backwardCommand}" Width="50">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="25">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    
                 </Button>
                 <Button
                     Grid.Row="2"
@@ -90,8 +97,15 @@
                         </Style>
                     </Button.Resources>
                 </Button>
-                <Button HorizontalAlignment="Right" Command="{Binding forwardCommand}">
-                    forward
+                <Button HorizontalAlignment="Right" Command="{Binding forwardCommand}" Width="50">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="25">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    
                 </Button>
             </Grid>
         </StackPanel>

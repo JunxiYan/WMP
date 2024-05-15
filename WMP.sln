@@ -5,8 +5,6 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WMP", "WMP\WMP.csproj", "{6BDC0203-5813-436C-B93C-D14852714E43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLModel", "SQLModel\SQLModel.csproj", "{9D9E4EE1-38B1-4708-8BFF-303C2E08FD20}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{6BDC0203-5813-436C-B93C-D14852714E43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BDC0203-5813-436C-B93C-D14852714E43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BDC0203-5813-436C-B93C-D14852714E43}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D9E4EE1-38B1-4708-8BFF-303C2E08FD20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D9E4EE1-38B1-4708-8BFF-303C2E08FD20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D9E4EE1-38B1-4708-8BFF-303C2E08FD20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D9E4EE1-38B1-4708-8BFF-303C2E08FD20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
