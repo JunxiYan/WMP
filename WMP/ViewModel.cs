@@ -52,8 +52,13 @@ namespace WMP
         {
             Microsoft.Win32.OpenFolderDialog Folderdialog = new Microsoft.Win32.OpenFolderDialog();
             Folderdialog.ShowDialog();
-           // MessageBox.Show(Folderdialog.FolderName);
+            // MessageBox.Show(Folderdialog.FolderName);
             //查找所有音频文件，将文件名存入一个列表中，并在messagebox输出
+            //如果文件夹不存在，则返回
+            if (!Directory.Exists(Folderdialog.FolderName))
+            {
+                return;
+            }
             string[] filesPath = Directory.GetFiles(Folderdialog.FolderName, "*.flac", SearchOption.AllDirectories);
             string[] files = new string[filesPath.Length];
             //遍历filesPath，使用ReadTitle转化为名称存入files中
